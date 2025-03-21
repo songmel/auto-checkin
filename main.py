@@ -13,6 +13,7 @@ import pygetwindow as gw
 import gspread
 import datetime
 from PyQt5 import QtWidgets, uic, QtCore
+from PyQt5.QtGui import QIcon
 
 from pystray import MenuItem as item
 import pystray
@@ -50,6 +51,9 @@ class UserForm(QtWidgets.QDialog):
 
         # 창의 테두리 제거
         self.setWindowFlags(QtCore.Qt.FramelessWindowHint)  # 테두리 없는 창 만들기
+
+        # 윈도우 아이콘 설정
+        self.setWindowIcon(QIcon('tray_logo.png'))  # 아이콘 파일 경로를 지정
 
         # OK 및 Cancel 버튼 이벤트 연결
         self.buttonBox.accepted.connect(self.ok_clicked)   # OK 버튼
