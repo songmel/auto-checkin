@@ -107,6 +107,17 @@ class UserForm(QtWidgets.QDialog):
         self.reject()  # 다이얼로그 닫기
 
 
+class AboutForm(QtWidgets.QWidget):
+    def __init__(self):
+        super().__init__()
+
+        uic.loadUi("about_ui.ui", self)  # Qt Designer UI 불러오기
+
+        # !!!창 팝업 위치 설정!!!
+        self.move(WINDOW_X_AXIS, WINDOW_Y_AXIS)
+
+        # 윈도우 아이콘 설정
+        self.setWindowIcon(QIcon('tray_logo.png'))  # 아이콘 파일 경로를 지정
 
 
 class sheet_manager():
@@ -130,16 +141,21 @@ class sheet_manager():
         self.wsh.update(f"A{next_row}:G{next_row}", [[current_time, name, studentid, department, contact, printnum, printttime]])  # A열에 값 추가
 
 system_life = True
+about_interrupt = False
 
 def quit_action(icon):
     global system_life
     icon.stop()
     system_life = False
 
+def about_action():
+    global about_interrupt
+    about_interrupt = True
+
 def tray_icon():
 
     image = Image.open("tray_logo.png")
-    menu = (item('quit', quit_action), item('quit', quit_action))
+    menu = (item('About', about_action), item('Quit', quit_action))
 
     icon = pystray.Icon("name", image, "LF Auto Check-in", menu)
     icon.run()
@@ -151,6 +167,7 @@ if __name__ == "__main__":
     app = QtWidgets.QApplication(sys.argv)
     sheet = sheet_manager()
     window = UserForm(sheet)
+    about_window = AboutForm()
 
     th1 = Thread(target=tray_icon, args=())
     th1.start()
@@ -168,6 +185,10 @@ if __name__ == "__main__":
                     send_finding = False
                 else:
                     continue
+            if (about_interrupt):
+                about_interrupt = False
+                about_window.show()
+                app.exec_() # forever loop!
             time.sleep(POLLING_RATE)
 
         while (not send_finding and system_life):
@@ -178,6 +199,10 @@ if __name__ == "__main__":
                 else:
                     send_finding = True
                     continue
+            if (about_interrupt):
+                about_interrupt = False
+                about_window.show()
+                app.exec_() # forever loop!
             time.sleep(POLLING_RATE)
     
     th1.join()
