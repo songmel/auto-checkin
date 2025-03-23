@@ -49,8 +49,8 @@ class UserForm(QtWidgets.QDialog):
         # !!!창 팝업 위치 설정!!!
         self.move(WINDOW_X_AXIS, WINDOW_Y_AXIS)
 
-        # 창의 테두리 제거
-        self.setWindowFlags(QtCore.Qt.FramelessWindowHint)  # 테두리 없는 창 만들기
+        # 창의 테두리 제거 & 최상단 출력
+        self.setWindowFlags(QtCore.Qt.FramelessWindowHint | QtCore.Qt.WindowStaysOnTopHint)  # 테두리 없는 창 만들기
 
         # 윈도우 아이콘 설정
         self.setWindowIcon(QIcon('tray_logo.png'))  # 아이콘 파일 경로를 지정
@@ -115,6 +115,9 @@ class AboutForm(QtWidgets.QWidget):
 
         # !!!창 팝업 위치 설정!!!
         self.move(WINDOW_X_AXIS, WINDOW_Y_AXIS)
+
+        # 최상단 출력
+        self.setWindowFlags(QtCore.Qt.WindowStaysOnTopHint)
 
         # 윈도우 아이콘 설정
         self.setWindowIcon(QIcon('tray_logo.png'))  # 아이콘 파일 경로를 지정
